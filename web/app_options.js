@@ -35,7 +35,7 @@ const defaultOptions = {
   },
   defaultUrl: {
     /** @type {string} */
-    value: 'compressed.tracemonkey-pldi-09.pdf',
+    value: 'assets/welcome.pdf',
     kind: OptionKind.VIEWER,
   },
   defaultZoomValue: {
@@ -204,7 +204,7 @@ const defaultOptions = {
   workerSrc: {
     /** @type {string} */
     value: (typeof PDFJSDev === 'undefined' || !PDFJSDev.test('PRODUCTION') ?
-            '../src/worker_loader.js' : '../build/pdf.worker.js'),
+            '../src/worker_loader.js' : 'pdf.js/build/pdf.worker.js'),
     kind: OptionKind.WORKER,
   },
 };

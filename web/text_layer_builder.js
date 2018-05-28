@@ -73,6 +73,9 @@ class TextLayerBuilder {
       pageNumber: this.pageNumber,
       numTextDivs: this.textDivs.length,
     });
+
+    if (window.translateTextLayer !== undefined)
+      window.translateTextLayer(textLayerDiv);
   }
 
   /**
