@@ -75,7 +75,7 @@ class TextLayerBuilder {
     });
 
     if (window.translateTextLayer !== undefined)
-      window.translateTextLayer(textLayerDiv);
+      window.translateTextLayer(this.textLayerDiv);
   }
 
   /**
