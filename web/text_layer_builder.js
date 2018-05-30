@@ -74,8 +74,9 @@ class TextLayerBuilder {
       numTextDivs: this.textDivs.length,
     });
 
-    if (window.translateTextLayer !== undefined)
+    if (window.translateTextLayer !== undefined) {
       window.translateTextLayer(this.textLayerDiv);
+    }
   }
 
   /**
