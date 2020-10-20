@@ -34,7 +34,7 @@ const defaultOptions = {
   },
   defaultUrl: {
     /** @type {string} */
-    value: 'assets/welcome.pdf',
+    value: "assets/welcome.pdf",
     kind: OptionKind.VIEWER,
   },
   defaultZoomValue: {
