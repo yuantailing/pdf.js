@@ -13,38 +13,18 @@
  * limitations under the License.
  */
 
-let compatibilityParams = Object.create(null);
-if (typeof PDFJSDev === 'undefined' || PDFJSDev.test('GENERIC')) {
-  const userAgent =
-    (typeof navigator !== 'undefined' && navigator.userAgent) || '';
-  const isIE = /Trident/.test(userAgent);
-  const isIOS = /\b(iPad|iPhone|iPod)(?=;)/.test(userAgent);
-  const isIOSChrome = /CriOS/.test(userAgent);
-  const isSafari = /Safari\//.test(userAgent) &&
-                   !/(Chrome\/|Android\s)/.test(userAgent);
+import { isNodeJS } from "../shared/is_node.js";
 
-  // Checks if possible to use URL.createObjectURL()
-  // Support: IE, Chrome on iOS
-  (function checkOnBlobSupport() {
-    // Sometimes IE and Chrome on iOS losing the data created with
-    // createObjectURL(), see issues #3977 and #8081.
-    if (isIE || isIOSChrome) {
-      compatibilityParams.disableCreateObjectURL = true;
-    }
-  })();
-
-  // Support: Safari 6.0+, iOS
-  (function checkRangeRequests() {
-    // Safari has issues with cached range requests, see issue #3260.
-    // Last tested with version 6.0.4.
-    if (isSafari || isIOS) {
-      compatibilityParams.disableRange = true;
-      compatibilityParams.disableStream = true;
+const compatibilityParams = Object.create(null);
+if (typeof PDFJSDev === "undefined" || PDFJSDev.test("GENERIC")) {
+  // Support: Node.js
+  (function checkFontFace() {
+    // Node.js is missing native support for `@font-face`.
+    if (isNodeJS) {
+      compatibilityParams.disableFontFace = true;
     }
   })();
 }
 const apiCompatibilityParams = Object.freeze(compatibilityParams);
 
-export {
-  apiCompatibilityParams,
-};
+export { apiCompatibilityParams };

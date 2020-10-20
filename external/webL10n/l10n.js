@@ -26,6 +26,9 @@
     - Removes consoleWarn and consoleLog and use console.log/warn directly.
     - Removes window._ assignment.
     - Remove compatibility code for OldIE.
+    - Replaces `String.prototype.substr()` with `String.prototype.substring()`.
+    - Removes `fireL10nReadyEvent` since the "localized" event it dispatches
+      is unused and may clash with an identically named event in the viewer.
 */
 
 /*jshint browser: true, devel: true, es5: true, globalstrict: true */
@@ -91,13 +94,6 @@ document.webL10n = (function(window, document, undefined) {
       }
     }
     return { id: l10nId, args: args };
-  }
-
-  function fireL10nReadyEvent(lang) {
-    var evtObject = document.createEvent('Event');
-    evtObject.initEvent('localized', true, false);
-    evtObject.language = lang;
-    document.dispatchEvent(evtObject);
   }
 
   function xhrLoadText(url, onSuccess, onFailure) {
@@ -267,7 +263,7 @@ document.webL10n = (function(window, document, undefined) {
           var id, prop, index = key.lastIndexOf('.');
           if (index > 0) { // an attribute has been specified
             id = key.substring(0, index);
-            prop = key.substr(index + 1);
+            prop = key.substring(index + 1);
           } else { // no attribute: assuming text content by default
             id = key;
             prop = gTextProp;
@@ -326,7 +322,6 @@ document.webL10n = (function(window, document, undefined) {
         console.log('no resource to load, early way out');
       }
       // early way out
-      fireL10nReadyEvent(lang);
       gReadyState = 'complete';
       return;
     }
@@ -338,7 +333,6 @@ document.webL10n = (function(window, document, undefined) {
       gResourceCount++;
       if (gResourceCount >= langCount) {
         callback();
-        fireL10nReadyEvent(lang);
         gReadyState = 'complete';
       }
     };
@@ -972,7 +966,7 @@ document.webL10n = (function(window, document, undefined) {
       var index = key.lastIndexOf('.');
       var prop = gTextProp;
       if (index > 0) { // An attribute has been specified
-        prop = key.substr(index + 1);
+        prop = key.substring(index + 1);
         key = key.substring(0, index);
       }
       var fallback;

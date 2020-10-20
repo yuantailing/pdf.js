@@ -13,19 +13,28 @@
  * limitations under the License.
  */
 
-let compatibilityParams = Object.create(null);
-if (typeof PDFJSDev === 'undefined' || PDFJSDev.test('GENERIC')) {
+const compatibilityParams = Object.create(null);
+if (typeof PDFJSDev === "undefined" || PDFJSDev.test("GENERIC")) {
   const userAgent =
-    (typeof navigator !== 'undefined' && navigator.userAgent) || '';
-  const isAndroid = /Android/.test(userAgent);
-  const isIE = /Trident/.test(userAgent);
-  const isIOS = /\b(iPad|iPhone|iPod)(?=;)/.test(userAgent);
+    (typeof navigator !== "undefined" && navigator.userAgent) || "";
+  const platform =
+    (typeof navigator !== "undefined" && navigator.platform) || "";
+  const maxTouchPoints =
+    (typeof navigator !== "undefined" && navigator.maxTouchPoints) || 1;
 
-  // Disable fullscreen support for certain problematic configurations.
-  // Support: IE11+ (when embedded).
-  (function checkFullscreenSupport() {
-    if (isIE && window.parent !== window) {
-      compatibilityParams.disableFullscreen = true;
+  const isAndroid = /Android/.test(userAgent);
+  const isIOS =
+    /\b(iPad|iPhone|iPod)(?=;)/.test(userAgent) ||
+    (platform === "MacIntel" && maxTouchPoints > 1);
+  const isIOSChrome = /CriOS/.test(userAgent);
+
+  // Checks if possible to use URL.createObjectURL()
+  // Support: IE, Chrome on iOS
+  (function checkOnBlobSupport() {
+    // Sometimes Chrome on iOS loses data created with createObjectURL(),
+    // see issue #8081.
+    if (isIOSChrome) {
+      compatibilityParams.disableCreateObjectURL = true;
     }
   })();
 
@@ -39,6 +48,4 @@ if (typeof PDFJSDev === 'undefined' || PDFJSDev.test('GENERIC')) {
 }
 const viewerCompatibilityParams = Object.freeze(compatibilityParams);
 
-export {
-  viewerCompatibilityParams,
-};
+export { viewerCompatibilityParams };
